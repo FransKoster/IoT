@@ -8,21 +8,15 @@ esp8266:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  ap:
-    ssid: "Wemos-D1-TFT-Fallback"
-    password: "12345678"
 
-captive_portal:
-
+# Enable logging
 logger:
 
 api:
-  encryption:
-    key: !secret api_encryption_key
 
 ota:
   - platform: esphome
-    password: !secret ota_password
+
 
 # SPI configuration for the TFT display
 spi:
@@ -32,7 +26,7 @@ spi:
 
 # ILI9341 Display configuration (Lolin TFT-2.4)
 display:
-  - platform: ili9xxx
+  - platform: mipi_spi
     model: ILI9341
     cs_pin: D8    # GPIO15
     dc_pin: D3    # GPIO0
@@ -40,9 +34,6 @@ display:
     rotation: 0
     invert_colors: false
     id: my_display
-    dimensions:
-      width: 320
-      height: 240
     update_interval: 1s
     lambda: |-
       // Clear screen with black background
@@ -81,17 +72,17 @@ font:
   - file: "gfonts://Roboto"
     id: title_font
     size: 32
-    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+    glyphs: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
   
   - file: "gfonts://Roboto"
     id: subtitle_font
     size: 20
-    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+    glyphs: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
   
   - file: "gfonts://Roboto"
     id: small_font
     size: 14
-    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+    glyphs: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
 
 # WiFi info sensors
 text_sensor:

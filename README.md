@@ -9,6 +9,7 @@ build cache.
 | Folder | Hardware | Configuration |
 | --- | --- | --- |
 | [`bmp280/`](bmp280/) | Wemos D1 Mini + BMP280 | Temperature and pressure sensors |
+| [`ds181/`](ds181/) | Adafruit HUZZAH ESP8266 + Dallas 1-Wire sensors | Five address-based temperature sensors |
 | [`esp32-cam/`](esp32-cam/) | ESP32-CAM with OV2640 | Camera stream and snapshot servers |
 | [`esp32-wroom-32/`](esp32-wroom-32/) | ESP32-WROOM-32 | Basic Wi-Fi/API/OTA setup |
 | [`rgb7/`](rgb7/) | Wemos D1 Mini + 7 WS2812 LEDs | Addressable RGB light |
