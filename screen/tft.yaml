@@ -1,0 +1,104 @@
+esphome:
+  name: wemos-d1-tft
+  friendly_name: "Wemos D1 TFT Display"
+
+esp8266:
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Wemos-D1-TFT-Fallback"
+    password: "12345678"
+
+captive_portal:
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+# SPI configuration for the TFT display
+spi:
+  clk_pin: D5   # GPIO14
+  mosi_pin: D7  # GPIO13
+  miso_pin: D6  # GPIO12
+
+# ILI9341 Display configuration (Lolin TFT-2.4)
+display:
+  - platform: ili9xxx
+    model: ILI9341
+    cs_pin: D8    # GPIO15
+    dc_pin: D3    # GPIO0
+    reset_pin: D4 # GPIO2
+    rotation: 0
+    invert_colors: false
+    id: my_display
+    dimensions:
+      width: 320
+      height: 240
+    update_interval: 1s
+    lambda: |-
+      // Clear screen with black background
+      it.fill(Color(0, 0, 0));
+      
+      // Draw white border
+      it.rectangle(0, 0, 320, 240, Color(255, 255, 255));
+      
+      // Draw title
+      it.printf(160, 20, id(title_font), Color(0, 255, 255), TextAlign::TOP_CENTER, 
+                "Wemos D1 Mini");
+      
+      // Draw subtitle
+      it.printf(160, 50, id(subtitle_font), Color(100, 200, 255), TextAlign::TOP_CENTER,
+                "TFT Display Test");
+      
+      // Draw some info text
+      it.printf(10, 100, id(small_font), Color(255, 255, 255), TextAlign::TOP_LEFT,
+                "IP: %.14s", id(wifi_ip).state.c_str());
+      
+      it.printf(10, 130, id(small_font), Color(255, 255, 255), TextAlign::TOP_LEFT,
+                "SSID: %.15s", id(wifi_ssid_text).state.c_str());
+      
+      it.printf(10, 160, id(small_font), Color(100, 255, 100), TextAlign::TOP_LEFT,
+                "Status: Connected");
+      
+      // Draw a progress bar
+      it.rectangle(10, 200, 300, 20, Color(100, 100, 100));
+      it.filled_rectangle(10, 200, 150, 20, Color(0, 255, 0));
+      
+      it.printf(160, 205, id(small_font), Color(255, 255, 255), TextAlign::CENTER,
+                "50%");
+
+# Fonts
+font:
+  - file: "gfonts://Roboto"
+    id: title_font
+    size: 32
+    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+  
+  - file: "gfonts://Roboto"
+    id: subtitle_font
+    size: 20
+    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+  
+  - file: "gfonts://Roboto"
+    id: small_font
+    size: 14
+    glyphs: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~°"
+
+# WiFi info sensors
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      id: wifi_ip
+    ssid:
+      id: wifi_ssid_text
+    bssid:
+      id: wifi_bssid
